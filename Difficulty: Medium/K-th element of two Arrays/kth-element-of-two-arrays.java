@@ -1,45 +1,30 @@
 class Solution {
     public int kthElement(int a[], int b[], int k) {
         // code here
-        int i = 0;
-        int j = 0;
+        if(a.length>b.length){
+            return kthElement(b,a,k);
+        }
+        int l = Math.max(0,k-b.length);
+        int r = Math.min(k,a.length);
         int ans = 0;
-        while(i<a.length || j<b.length){
-            if(i<a.length && j<b.length){
-                if(a[i]==b[j]){
-                    k--;
-                    if(k==0) ans = a[i];
-                    i++;
-                    k--;
-                    if(k==0) ans = b[j];
-                    j++;
-                }
-                else if(a[i]<b[j]){
-                    k--;
-                    if(k==0){
-                        ans = a[i];
-                    }
-                    i++;
-                }
-                else if(b[j]<a[i]){
-                    k--;
-                    if(k==0){
-                        ans = b[j];
-                    }
-                    j++;
-                }
+        while(l<=r){
+            int mid = l+(r-l)/2;
+            int part = k-mid;
+            int a_left = (mid==0) ? Integer.MIN_VALUE : a[mid-1];
+            int a_right = (mid==a.length) ? Integer.MAX_VALUE : a[mid];
+            int b_left = (part==0) ? Integer.MIN_VALUE : b[part-1];
+            int b_right = (part==b.length) ? Integer.MAX_VALUE : b[part];
+            if(b_left>a_right){
+                l = mid+1;
             }
-            else if(i<a.length){
-                k--;
-                if(k==0) ans = a[i];
-                i++;
+            else if(a_left>b_right){
+                r = mid-1;
             }
             else{
-                k--;
-                if(k==0) ans = b[j];
-                j++;
-            }
+                return Math.max(a_left,b_left);
+            };
         }
-        return ans;
+        
+        return -1;
     }
 }
